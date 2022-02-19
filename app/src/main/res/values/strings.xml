@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">whatsApp_Clone</string>
+    <string name="app_name">whatsApp</string>
 
     <string name="digite_email">Digite o seu E-mail</string>
     <string name="digite_senha">Digite a sua senha</string>
@@ -10,4 +10,21 @@
     <string name="pesquisar">Pesquisar</string>
     <string name="configuracoes">Configurações</string>
     <string name="sair">Sair</string>
+    <string name="conversas">Conversas</string>
+    <string name="contato">Contato</string>
+    <string name="nome_usuario">Nome do usuario</string>
+    <string name="msg_configuracao">Esse nao é o seu nome de usuario nem sua senha: Esse nome ficara visivel para seus contatos no WhatsApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="nome_teste">Leandro ricardo caixeta junior</string>
 </resources>

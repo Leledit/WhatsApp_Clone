@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="leandro.caixeta.whatsapp_clone">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" /> <!-- Definindo permisoes -->
+    <!-- permisao para acessar a memoria do celular -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Permissao para usar a camera do celular -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,6 +16,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WhatsApp_Clone">
+        <activity
+            android:name=".activity.ChatActivity"
+            android:exported="false"
+            android:label="@string/title_activity_chat"
+            android:theme="@style/Theme.WhatsApp_Clone.NoActionBar"
+            android:parentActivityName=".activity.MainActivity" />
+        <activity
+            android:name=".activity.configuracoes"
+            android:exported="false"
+            android:parentActivityName=".activity.MainActivity" />
         <activity
             android:name=".activity.CadastroActiviry"
             android:exported="false" />

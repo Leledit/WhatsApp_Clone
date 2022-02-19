@@ -21,6 +21,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import leandro.caixeta.whatsapp_clone.R;
 import leandro.caixeta.whatsapp_clone.config.ConfiguracaoFirebase;
+import leandro.caixeta.whatsapp_clone.helper.Base64Custon;
+import leandro.caixeta.whatsapp_clone.helper.UsuarioFirebase;
 import leandro.caixeta.whatsapp_clone.model.Usuario;
 
 public class CadastroActiviry extends AppCompatActivity {
@@ -82,6 +84,7 @@ public class CadastroActiviry extends AppCompatActivity {
 
     }
 
+
     public void cadastrandosuarioFirebase(Usuario usuario){
         auth.createUserWithEmailAndPassword(usuario.getEmail(),usuario.getSenha())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -90,7 +93,22 @@ public class CadastroActiviry extends AppCompatActivity {
                 if(task.isSuccessful()){
                     //Deu certo fazer o cadastro do usuario
                     Toast.makeText(getApplicationContext(),"Sucesso ao cadastrar o usuario!",Toast.LENGTH_LONG).show();
+                    UsuarioFirebase.atualizarNomeUsuario(usuario.getNome());
                     finish();
+
+                    //Salvando os dados do usuario no banco de dados(Realtime database)
+
+                    try {
+
+                        String identificadoUsuario = Base64Custon.codificarBase64(usuario.getEmail());
+                        usuario.setId(identificadoUsuario);
+                        usuario.salvar();
+
+
+                    }catch (Exception e){
+
+                    }
+
                 }else{
                     //deu algum erro no processo de cadastro
 
