@@ -17,6 +17,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import leandro.caixeta.whatsapp_clone.R;
 import leandro.caixeta.whatsapp_clone.model.Conversa;
+import leandro.caixeta.whatsapp_clone.model.Grupo;
 import leandro.caixeta.whatsapp_clone.model.Usuario;
 
 public class ConversaAdapter extends RecyclerView.Adapter<ConversaAdapter.MyViewholder> {
@@ -45,16 +46,35 @@ public class ConversaAdapter extends RecyclerView.Adapter<ConversaAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewholder holder, int position) {
 
         Conversa conversa = conversas.get(position);
-        Usuario usuario = conversa.getUsuarioExibicao();
         holder.ultimaMensagem.setText(conversa.getUltimaMensagem());
-        holder.nome.setText(usuario.getNome());
 
-        if(usuario.getFoto() != null){
-            Uri uri = Uri.parse(usuario.getFoto());
-            Glide.with(context).load(uri).into(holder.foto);
+        //Verificando se a conversa é normal(de pessoa para pessoa) ou se é uma conversa em grupo
+        if(conversa.getIsGrup().equals("true")){
+            Grupo grupo = conversa.getGrupo();
+            holder.nome.setText(grupo.getNome());
+            if(grupo.getFoto() != null){
+                Uri uri = Uri.parse(grupo.getFoto());
+                Glide.with(context).load(uri).into(holder.foto);
+            }else{
+                holder.foto.setImageResource(R.drawable.padrao);
+            }
+
         }else{
-            holder.foto.setImageResource(R.drawable.padrao);
+            Usuario usuario = conversa.getUsuarioExibicao();
+            if(usuario != null){
+                holder.nome.setText(usuario.getNome());
+                if(usuario.getFoto() != null){
+                    Uri uri = Uri.parse(usuario.getFoto());
+                    Glide.with(context).load(uri).into(holder.foto);
+                }else{
+                    holder.foto.setImageResource(R.drawable.padrao);
+                }
+            }
+
         }
+
+
+
 
 
 

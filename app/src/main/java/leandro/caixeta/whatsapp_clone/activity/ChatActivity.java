@@ -48,6 +48,7 @@ import leandro.caixeta.whatsapp_clone.databinding.ActivityChatBinding;
 import leandro.caixeta.whatsapp_clone.helper.Base64Custon;
 import leandro.caixeta.whatsapp_clone.helper.UsuarioFirebase;
 import leandro.caixeta.whatsapp_clone.model.Conversa;
+import leandro.caixeta.whatsapp_clone.model.Grupo;
 import leandro.caixeta.whatsapp_clone.model.Mensagem;
 import leandro.caixeta.whatsapp_clone.model.Usuario;
 
@@ -69,6 +70,7 @@ public class ChatActivity extends AppCompatActivity {
     private ChildEventListener childEventListenerMensagens ;
     private static final int SELECAO_CAMERA = 1;
     private StorageReference storageReference  =ConfiguracaoFirebase.getStorage();
+    private Grupo grupo;
 
 
     //identificador usuarios remetente e destinatario
@@ -101,23 +103,41 @@ public class ChatActivity extends AppCompatActivity {
         floatButonEnviar = findViewById(R.id.floatButonEnviar);
         recyclerViewMensagens = findViewById(R.id.recyclerViewMensagens);
         imageCamera = findViewById(R.id.imageCamera);
+        grupo = new Grupo();
 
         //Recuperando os dados do usuario destinatario
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
-            usuarioDestinatario = (Usuario) bundle.getSerializable("chatContato");
-            textViewNomeChate.setText(usuarioDestinatario.getNome());
+           if(bundle.containsKey("chatGrupo")){
+
+               grupo = (Grupo) bundle.getSerializable("chatGrupo");
+               idUsuarioDestinatario = grupo.getId();
+               textViewNomeChate.setText(grupo.getNome());
 
 
-            String foto = usuarioDestinatario.getFoto();
-            if(foto != null){
-                Uri uri =Uri.parse(foto);
-                Glide.with(ChatActivity.this).load(uri).into(circleImagemFotoChat);
-            }else{
-                circleImagemFotoChat.setImageResource(R.drawable.padrao);
-            }
-            //recuperando os dados do usuario destinatario
-            idUsuarioDestinatario = Base64Custon.codificarBase64(usuarioDestinatario.getEmail());
+               String foto = grupo.getFoto();
+               if(foto != null){
+                   Uri uri =Uri.parse(foto);
+                   Glide.with(ChatActivity.this).load(uri).into(circleImagemFotoChat);
+               }else{
+                   circleImagemFotoChat.setImageResource(R.drawable.padrao);
+               }
+
+           }else{
+               usuarioDestinatario = (Usuario) bundle.getSerializable("chatContato");
+               textViewNomeChate.setText(usuarioDestinatario.getNome());
+
+
+               String foto = usuarioDestinatario.getFoto();
+               if(foto != null){
+                   Uri uri =Uri.parse(foto);
+                   Glide.with(ChatActivity.this).load(uri).into(circleImagemFotoChat);
+               }else{
+                   circleImagemFotoChat.setImageResource(R.drawable.padrao);
+               }
+               //recuperando os dados do usuario destinatario
+               idUsuarioDestinatario = Base64Custon.codificarBase64(usuarioDestinatario.getEmail());
+           }
         }
 
         //recuperando os dados do usuario Remetente
@@ -232,29 +252,64 @@ public class ChatActivity extends AppCompatActivity {
 
         if(!mensagem.isEmpty()){
 
-            Mensagem msg = new Mensagem();
-            msg.setIdUsuario(idUsuarioRemetente);
-            msg.setMensagem(mensagem);
-            //chamando metodo responsavel por salvar a mensagem para o remetente
-            salvarMensagem(idUsuarioRemetente,idUsuarioDestinatario,msg);
-            //chamando metodo responsavel por salvar a mensagem para o Destinatario
-            salvarMensagem(idUsuarioDestinatario,idUsuarioRemetente ,msg);
+            if(usuarioDestinatario != null){
+                Mensagem msg = new Mensagem();
+                msg.setIdUsuario(idUsuarioRemetente);
+                msg.setMensagem(mensagem);
+                //chamando metodo responsavel por salvar a mensagem para o remetente
+                salvarMensagem(idUsuarioRemetente,idUsuarioDestinatario,msg);
+                //chamando metodo responsavel por salvar a mensagem para o Destinatario
+                salvarMensagem(idUsuarioDestinatario,idUsuarioRemetente ,msg);
 
-            //Salvando uma conversa
-            salvarConversa(msg);
+                //Salvando uma conversa
+                salvarConversa(msg,false);
+            }else{
+
+                for(Usuario membro: grupo.getMembros()){
+
+                    String idRemetenteGrupo = Base64Custon.codificarBase64(membro.getEmail());
+                    String idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
+                    Mensagem msg = new Mensagem();
+                    msg.setIdUsuario(idRemetenteGrupo);
+                    msg.setMensagem(mensagem);
+
+                    salvarMensagem(idRemetenteGrupo,idUsuarioDestinatario,msg);
+
+                    //Salvando uma conversa
+                    salvarConversa(msg,true);
+
+                }
+            }
+
+
 
         }else{
             Toast.makeText(this, "Digite uma mensagem para enviar", Toast.LENGTH_SHORT).show();
         }
     }
-    private void salvarConversa(Mensagem msg){
+    private void salvarConversa(Mensagem msg,boolean isGrup){
 
+        //Salvando conversa em grupo
         Conversa conversaRemetente = new Conversa();
         conversaRemetente.setIdRemetente(idUsuarioRemetente);
         conversaRemetente.setIdDestinatario(idUsuarioDestinatario);
         conversaRemetente.setUltimaMensagem(msg.getMensagem());
-        conversaRemetente.setUsuarioExibicao(usuarioDestinatario );
+
+        if(isGrup){//conversa em grupo
+
+            //Conversa de grupo
+            conversaRemetente.setIsGrup("true");
+            conversaRemetente.setGrupo(grupo);
+
+
+        }else{//conversa entre duas pessoas
+            //Conversa convencional
+            conversaRemetente.setUsuarioExibicao(usuarioDestinatario );
+            conversaRemetente.setIsGrup("false");
+
+        }
         conversaRemetente.salvar();
+
 
     }
 

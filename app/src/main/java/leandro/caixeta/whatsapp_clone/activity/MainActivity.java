@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
@@ -32,18 +35,16 @@ public class MainActivity extends AppCompatActivity {
 
      private Toolbar toolbar;
      private FirebaseAuth firebaseAuth = ConfiguracaoFirebase.getAutha();
+     private MaterialSearchView searchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Configurando a toolbar
-       /* toolbar = findViewById(R.id.toolbarPrincipal);
-        toolbar.setTitle("WhatsApp");
 
-        */
-       // setActionBar(toolbar);
-       // setSupportActionBar(toolbar);
+        searchView = findViewById(R.id.searchView);
+
 
         //Configurando as abas do menu
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
@@ -65,6 +66,19 @@ public class MainActivity extends AppCompatActivity {
      public boolean onCreateOptionsMenu(Menu menu) {
          MenuInflater inflater = getMenuInflater();
          inflater.inflate(R.menu.menu,menu);
+
+         //Configurar botao de pesquisa
+         MenuItem item = menu.findItem(R.id.menuConfiguracoes);
+
+        /* if(item.equals( null)){
+             Toast.makeText(this, "Ta vazio", Toast.LENGTH_SHORT).show();
+         }else{
+             Toast.makeText(this, "Ta cheio"+item, Toast.LENGTH_SHORT).show();
+         }
+
+         */
+
+     //   searchView.setMenuItem(item);
 
          return super.onCreateOptionsMenu(menu);
      }

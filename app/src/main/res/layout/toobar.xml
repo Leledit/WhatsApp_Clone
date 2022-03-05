@@ -10,4 +10,11 @@
         android:background="@color/verde"
         android:theme="@style/Toolbar"
         />
+
+    <com.miguelcatalan.materialsearchview.MaterialSearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
 </FrameLayout>

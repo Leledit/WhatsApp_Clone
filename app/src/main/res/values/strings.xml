@@ -27,4 +27,10 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string name="nome_teste">Leandro ricardo caixeta junior</string>
+    <string name="title_activity_grupo_actiity">grupoActiity</string>
+    <string name="title_activity_grupo">grupoActivity</string>
+    <string name="title_activity_cadastro_grupo">CadastroGrupoActivity</string>
+    <string name="nome_grupo">Nome do grupo</string>
+    <string name="mensagem_cadastro_grupo">Defina um texto e uma imagem opcional</string>
+    <string name="qtd_participante_grupo">Participantes: 0</string>
 </resources>

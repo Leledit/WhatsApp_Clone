@@ -69,4 +69,8 @@ dependencies {
 
     /*Dependecia para aredondar imagens*/
     implementation ('de.hdodenhof:circleimageview:3.1.0')
+
+    //biblioteca que manipula o SearchView
+   // implementation('boxresin.android:materialsearchview:2.0.0' )
+    implementation('com.miguelcatalan:materialsearchview:1.0.0')
 }

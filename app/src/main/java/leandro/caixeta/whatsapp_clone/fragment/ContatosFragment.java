@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import leandro.caixeta.whatsapp_clone.R;
 import leandro.caixeta.whatsapp_clone.activity.ChatActivity;
+import leandro.caixeta.whatsapp_clone.activity.GrupoActivity;
 import leandro.caixeta.whatsapp_clone.adapter.ContatoAdapter;
 import leandro.caixeta.whatsapp_clone.config.ConfiguracaoFirebase;
 import leandro.caixeta.whatsapp_clone.helper.RecyclerItemClickListener;
@@ -103,9 +104,22 @@ public class ContatosFragment extends Fragment {
             public void onItemClick(View view, int position) {
 
                 Usuario usuario = listaContato.get(position);
-                Intent i = new Intent(getActivity(), ChatActivity.class);
-                i.putExtra("chatContato",usuario);
-                startActivity(i);
+                boolean cabecalho = usuario.getEmail().isEmpty();
+
+                if(cabecalho){
+                    Intent i = new Intent(getActivity(), GrupoActivity.class);
+                    startActivity(i);
+
+
+
+
+                }else{
+                    Intent i = new Intent(getActivity(), ChatActivity.class);
+                    i.putExtra("chatContato",usuario);
+                    startActivity(i);
+                }
+
+
             }
 
             @Override
@@ -119,6 +133,7 @@ public class ContatosFragment extends Fragment {
             }
         }
         ));
+
 
 
 
@@ -139,6 +154,16 @@ public class ContatosFragment extends Fragment {
 
     public void recuperarContato(){
         listaContato.clear();
+
+        /*Define usuario com e-mail vazio
+         *em caso de e-mail vazio o usuario sera utilizado com cabecalho, exibindo novo grupo
+         * */
+        Usuario itemGrupo = new Usuario();
+        itemGrupo.setNome("Novo grupo");
+        itemGrupo.setEmail("");
+        listaContato.add(itemGrupo);
+
+
        eventListenerContato = usuarioRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -152,8 +177,11 @@ public class ContatosFragment extends Fragment {
 
                 }
 
+
+
                 contatoAdapter.notifyDataSetChanged();
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -161,5 +189,6 @@ public class ContatosFragment extends Fragment {
             }
         });
     }
+
 
 }

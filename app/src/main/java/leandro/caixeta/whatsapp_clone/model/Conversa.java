@@ -9,8 +9,11 @@ public class Conversa {
     private String idDestinatario;
     private String ultimaMensagem;
     private Usuario usuarioExibicao;
+    private String isGrup;
+    private  Grupo grupo;
 
     public Conversa() {
+        this.setIsGrup("false");
     }
     public void salvar(){
         DatabaseReference reference = ConfiguracaoFirebase.getDatase();
@@ -18,6 +21,22 @@ public class Conversa {
         conversaRef.child(this.getIdRemetente())
                 .child(getIdDestinatario())
                 .setValue(this);
+    }
+
+    public String getIsGrup() {
+        return isGrup;
+    }
+
+    public void setIsGrup(String isGrup) {
+        this.isGrup = isGrup;
+    }
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
     }
 
     public String getIdRemetente() {

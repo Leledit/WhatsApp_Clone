@@ -18,33 +18,36 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import leandro.caixeta.whatsapp_clone.R;
 import leandro.caixeta.whatsapp_clone.model.Usuario;
 
-public class ContatoAdapter extends RecyclerView.Adapter<ContatoAdapter.MyViewholder> {
+public class GrupoSelecionandoAdapter extends RecyclerView.Adapter<GrupoSelecionandoAdapter.MyViewholder>{
 
-    private List<Usuario> contatos;
+    private List<Usuario> contatosSelecionados;
     private Context context;
 
-    public ContatoAdapter(List<Usuario> listaContato,Context c) {
-         this.contatos = listaContato;
-         this.context = c;
+    public GrupoSelecionandoAdapter(List<Usuario> listaContato,Context c) {
+        this.contatosSelecionados = listaContato;
+        this.context = c;
+
+
     }
 
     @NonNull
     @Override
     public MyViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View itemLista = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_contatos,parent,false);
+        View itemLista = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_grupo_selecionado,parent,false);
 
-        return new MyViewholder(itemLista);
+        return new GrupoSelecionandoAdapter.MyViewholder(itemLista);
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewholder holder, int position) {
-
-        Usuario usuario = contatos.get(position);
+        Usuario usuario = contatosSelecionados.get(position);
         boolean cabecalho = usuario.getEmail().isEmpty();
 
+
         holder.nome.setText(usuario.getNome());
-        holder.email.setText(usuario.getEmail());
+
         //caso tenha uma imagem armazenada no firebase, ela sera exibida, caso contrario sera exibido uma imagem padrao
         if(usuario.getFoto() != null){
             Uri uri = Uri.parse(usuario.getFoto());
@@ -52,32 +55,33 @@ public class ContatoAdapter extends RecyclerView.Adapter<ContatoAdapter.MyViewho
         }else{
             if(cabecalho){
                 holder.foto.setImageResource(R.drawable.icone_grupo);
-                holder.email.setVisibility(View.GONE);
             }else {
 
                 holder.foto.setImageResource(R.drawable.padrao);
             }
         }
+
+
     }
 
     @Override
     public int getItemCount() {
-        return contatos.size();
+        return contatosSelecionados.size();
     }
 
     public class MyViewholder extends RecyclerView.ViewHolder {
 
         CircleImageView foto;
-        TextView nome,email;
-
+        TextView nome;
 
         public MyViewholder(@NonNull View itemView) {
             super(itemView);
 
-            foto = itemView.findViewById(R.id.imageViewFotoContato);
-            nome = itemView.findViewById(R.id.textViewNomeContato);
-            email = itemView.findViewById(R.id.textViewEmailContato);
+            foto = itemView.findViewById(R.id.imgGrupo);
+            nome = itemView.findViewById(R.id.textViewNomeMembroSelecionado);
         }
     }
+
+
 
 }
